@@ -1,4 +1,4 @@
-package ChunnuCompiler
+package chunnu_compiler
 
 import (
 	"unicode"

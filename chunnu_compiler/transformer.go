@@ -1,4 +1,4 @@
-package ChunnuCompiler
+package chunnu_compiler
 
 import "log"
 
@@ -35,7 +35,7 @@ func transformer(asTree ast) ast {
 			thisNode.context = expression.arguments
 
 			if parent.kind == "CallExpression"{
-				expressionStatement:=node{
+				expressionStatement:= node{
 					kind:"ExpressionStatement",
 					expression:&expression,
 				}
@@ -53,7 +53,7 @@ func transformer(asTree ast) ast {
 
 
 func traverser(asTree ast, vTool visitor) {
-	traverseNode(node(asTree),node{},vTool)
+	traverseNode(node(asTree), node{},vTool)
 }
 
 func traverseArray(a []node, p node, v visitor) {

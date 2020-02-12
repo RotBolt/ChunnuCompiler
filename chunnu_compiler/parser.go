@@ -1,26 +1,30 @@
-package ChunnuCompiler
+package chunnu_compiler
 
-import "log"
+import (
+	"log"
+)
 
 var pc int
+var pt []token
 func parser(tokens []token) ast {
 	pc := 0
-
+	pt =tokens
 	ast := ast{
 		kind: "Program",
 		body: []node{},
 	}
 	for pc < len(tokens) {
-		ast.body = append(ast.body, walk(tokens))
+		ast.body = append(ast.body, walk(&pc))
 	}
 	return ast
 }
 
-func walk(tokens []token) node {
-	token := tokens[pc]
+func walk(pc *int) node {
+
+	token := pt[*pc]
 
 	if token.category == "number_literal" {
-		pc++
+		*pc++
 		return node{
 			kind:  "NumberLiteral",
 			value: token.value,
@@ -28,9 +32,9 @@ func walk(tokens []token) node {
 	}
 
 	if token.category == "parenthesis" && token.value == "(" {
-		// increament and check for other tokens, "(" will not be added to ast
-		pc++
-		token :=tokens[pc]
+		// increment and check for other tokens, "(" will not be added to ast
+		*pc++
+		token :=pt[*pc]
 
 		thisNode := node{
 			kind: "CallExpression",
@@ -38,16 +42,16 @@ func walk(tokens []token) node {
 			params:[]node{},
 		}
 
-		pc++
-		token = tokens[pc]
+		*pc++
+		token = pt[*pc]
 
 		for token.category != "parenthesis" ||
 			(token.category == "parenthesis" && token.value != ")"){
-			thisNode.params = append(thisNode.params,walk(tokens))
-			token = tokens[pc]
+			thisNode.params = append(thisNode.params,walk(pc))
+			token = pt[*pc]
 		}
 
-		pc++
+		*pc++
 
 		return thisNode
 	}
